@@ -145,10 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _gptresponse = generatedText;
         await Clipboard.setData(ClipboardData(text: _gptresponse));
         ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("copied to clickboard"),
           behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 1),
+          duration: Duration(milliseconds: 50),
         ));
       } else {
         throw Exception(
@@ -181,7 +181,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Expanded(
             child: Card(
-              child: Center(child: Text((_gptresponse))),
+              child: Center(
+                  child: Text(
+                (_gptresponse),
+                textAlign: TextAlign.center,
+              )),
             ),
           ),
           Card(
@@ -191,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 200),
+                      constraints: const BoxConstraints(maxHeight: 200),
                       child: Scrollbar(
                         child: SingleChildScrollView(
                           child: TextField(
@@ -212,6 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (_promptController.text.trim().isEmpty) return;
                         await generateTextUsingGPT3(_promptController.text);
                         _promptController.clear();
+                        FocusScope.of(context).unfocus();
+
                         setState(() {});
                       },
                       icon: const Icon(Icons.send)),
