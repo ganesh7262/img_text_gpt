@@ -27,6 +27,8 @@ print("Hello world")
 ''';
   final txtRecognizer = TextRecognizer();
 
+  bool _isgettingresponse = false;
+
   void _modalBottomDisplayer() {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -137,13 +139,16 @@ print("Hello world")
         final jsonResponse = json.decode(response.body);
         final generatedText = jsonResponse['choices'][0]['text'];
         _gptresponse = generatedText;
+
         await Clipboard.setData(ClipboardData(text: _gptresponse));
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("copied to clickboard"),
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(milliseconds: 50),
-        ));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("copied to clickboard"),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(milliseconds: 50),
+          ));
+        }
       } else {
         throw Exception(
             "Failed to generate text. Status Code: ${response.statusCode}");
@@ -151,6 +156,14 @@ print("Hello world")
     } catch (e) {
       throw Exception("Error generating text: $e");
     }
+  }
+
+  Widget chat_screen() {
+    if (_isgettingresponse) return CircularProgressIndicator();
+    return Text(
+      (_gptresponse),
+      textAlign: TextAlign.center,
+    );
   }
 
   @override
@@ -176,10 +189,8 @@ print("Hello world")
           Expanded(
             child: Card(
               child: Center(
-                  child: Text(
-                (_gptresponse),
-                textAlign: TextAlign.center,
-              )),
+                child: chat_screen(),
+              ),
             ),
           ),
           Card(
@@ -208,11 +219,16 @@ print("Hello world")
                   IconButton(
                       onPressed: () async {
                         if (_promptController.text.trim().isEmpty) return;
+                        setState(() {
+                          _isgettingresponse = true;
+                        });
                         await generateTextUsingGPT3(_promptController.text);
                         _promptController.clear();
-                        FocusScope.of(context).unfocus();
+                        if (context.mounted) FocusScope.of(context).unfocus();
 
-                        setState(() {});
+                        setState(() {
+                          _isgettingresponse = false;
+                        });
                       },
                       icon: const Icon(Icons.send)),
                 ],
