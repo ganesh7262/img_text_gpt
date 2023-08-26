@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       enableSuggestions: true,
                       minLines: 1,
                       maxLines: null,
-                      autofocus: true,
+                      autofocus: false,
                       decoration: const InputDecoration(labelText: "Prompt"),
                     ),
                   ),
@@ -176,46 +176,50 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: Card(
-                child: Center(child: Text((_gptresponse))),
-              ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Expanded(
+            child: Card(
+              child: Center(child: Text((_gptresponse))),
             ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8, left: 15),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: null,
-                        autocorrect: true,
-                        enableSuggestions: true,
-                        controller: _promptController,
-                        decoration: const InputDecoration(
-                            label: Text("Enter a Prompt")),
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8, left: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 200),
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: TextField(
+                            minLines: 1,
+                            maxLines: null,
+                            autocorrect: true,
+                            enableSuggestions: true,
+                            controller: _promptController,
+                            decoration: const InputDecoration(
+                                label: Text("Enter a Prompt")),
+                          ),
+                        ),
                       ),
                     ),
-                    IconButton(
-                        onPressed: () async {
-                          if (_promptController.text.trim().isEmpty) return;
-                          await generateTextUsingGPT3(_promptController.text);
-                          _promptController.clear();
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.send)),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        if (_promptController.text.trim().isEmpty) return;
+                        await generateTextUsingGPT3(_promptController.text);
+                        _promptController.clear();
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.send)),
+                ],
               ),
-            )
-          ]),
-        ),
+            ),
+          )
+        ]),
       ),
     );
   }
