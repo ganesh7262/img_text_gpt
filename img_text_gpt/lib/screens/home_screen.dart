@@ -23,13 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _modelBottomSheetTextController = TextEditingController();
   final _promptController = TextEditingController();
   String _gptresponse = '''
-#include <stdio.h>
-
-  int main(void)
-  {
-      printf("Hi!");
-      return 0;
-  }
+print("Hello world")
 ''';
   final txtRecognizer = TextRecognizer();
 
