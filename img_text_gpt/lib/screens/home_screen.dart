@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:http/http.dart';
@@ -22,13 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String recognisedText = "";
   final _modelBottomSheetTextController = TextEditingController();
   final _promptController = TextEditingController();
-  String _gptresponse = '''
-print("Hello world")
-''';
+  String _gptresponse = '''print("Hello world")''';
   final txtRecognizer = TextRecognizer();
 
   bool _isgettingresponse = false;
 
+  /// this shows the modal bottom sheet which displays the picked image and a preview of extracted text from image
   void _modalBottomDisplayer() {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -74,12 +72,14 @@ print("Hello world")
         });
   }
 
+  ///reconginzed the text
   Future _recognizeText() async {
     final txt = await txtRecognizer.processImage(inpImg_ml);
     var prompt = txt.text.split("\n").join(" ");
     recognisedText = prompt;
   }
 
+  /// get image from gallery and reconginze the text
   void _fromGallery() async {
     final galleryImage =
         await _cameraObj.pickImage(source: ImageSource.gallery);
@@ -93,6 +93,7 @@ print("Hello world")
     _modalBottomDisplayer();
   }
 
+  ///get image from camera and reconginze the text
   void _fromCamera() async {
     final img = await _cameraObj.pickImage(source: ImageSource.camera);
     if (img != null) {
@@ -158,8 +159,8 @@ print("Hello world")
     }
   }
 
-  Widget chat_screen() {
-    if (_isgettingresponse) return CircularProgressIndicator();
+  Widget chatscreen() {
+    if (_isgettingresponse) return const CircularProgressIndicator();
     return Text(
       (_gptresponse),
       textAlign: TextAlign.center,
@@ -189,7 +190,7 @@ print("Hello world")
           Expanded(
             child: Card(
               child: Center(
-                child: chat_screen(),
+                child: chatscreen(),
               ),
             ),
           ),
