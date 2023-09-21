@@ -14,14 +14,20 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HistoryModel>(
-      builder: (context, hist, child) {
-        if (hist.totalConvo == 0) {
-          return defaultScreen();
-        } else {
-          return const Scaffold(
-            body: Text("has convo"),
-          );
-        }
+      builder: (context, history, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Conversation History'),
+          ),
+          body: ListView.builder(
+            itemCount: history.totalConvo,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(history.hist[index].gptResponse),
+              );
+            },
+          ),
+        );
       },
     );
   }
