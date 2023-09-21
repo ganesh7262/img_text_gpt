@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:img_text_gpt/screens/history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final _promptController = TextEditingController();
   String _gptresponse = '''print("Hello world")''';
   final txtRecognizer = TextRecognizer();
-
   bool _isgettingresponse = false;
 
   /// this shows the modal bottom sheet which displays the picked image and a preview of extracted text from image
@@ -167,6 +167,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void showHistory() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HistoryScreen(),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,13 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("ImgTextGPT"),
         actions: [
           IconButton(onPressed: _fromCamera, icon: const Icon(Icons.camera)),
+          IconButton(
+            onPressed: _fromGallery,
+            icon: const Icon(Icons.collections),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: IconButton(
-              onPressed: _fromGallery,
-              icon: const Icon(Icons.collections),
-            ),
-          )
+            child:
+                IconButton(onPressed: showHistory, icon: Icon(Icons.history)),
+          ),
         ],
       ),
       body: Padding(
