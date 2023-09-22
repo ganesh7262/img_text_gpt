@@ -6,7 +6,9 @@ import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:img_text_gpt/history_model.dart';
 import 'package:img_text_gpt/screens/history_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -147,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("copied to clickboard"),
             behavior: SnackBarBehavior.floating,
-            duration: Duration(milliseconds: 50),
+            duration: Duration(milliseconds: 100),
           ));
         }
       } else {
@@ -234,6 +236,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           _isgettingresponse = true;
                         });
                         await generateTextUsingGPT3(_promptController.text);
+                        if (context.mounted) {
+                          PromptAns pa = PromptAns(
+                              prompt: _promptController.text,
+                              gptResponse: _gptresponse);
+                          Provider.of<HistoryModel>(context, listen: false)
+                              .addToHist(pa);
+                        }
                         _promptController.clear();
                         if (context.mounted) FocusScope.of(context).unfocus();
 
