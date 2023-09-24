@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:img_text_gpt/history_model.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ConvoBlock extends StatelessWidget {
@@ -31,8 +32,14 @@ class ConvoBlock extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                prompt,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    prompt,
+                  ),
+                  Text(TimeOfDay.now().format(context).toString()),
+                ],
               ),
               const SizedBox(
                 height: 5,
@@ -58,6 +65,30 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
+  Padding ifHistory(HistoryModel history) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        itemCount: history.totalConvo,
+        itemBuilder: (context, index) {
+          return ConvoBlock(
+              prompt: history.hist[index].prompt,
+              gptResponse: history.hist[index].gptResponse);
+        },
+      ),
+    );
+  }
+
+  Widget displayMainContent(HistoryModel history) {
+    if (history.hist.isEmpty) return defaultScreen();
+    return ifHistory(history);
+  }
+
+  String getCurrentDate() {
+    final formatter = DateFormat.yMd();
+    return formatter.format(DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HistoryModel>(
@@ -65,18 +96,14 @@ class HistoryScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Conversation History'),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(getCurrentDate()),
+              )
+            ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: history.totalConvo,
-              itemBuilder: (context, index) {
-                return ConvoBlock(
-                    prompt: history.hist[index].prompt,
-                    gptResponse: history.hist[index].gptResponse);
-              },
-            ),
-          ),
+          body: displayMainContent(history),
         );
       },
     );
