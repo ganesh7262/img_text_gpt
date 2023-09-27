@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:img_text_gpt/history_model.dart';
+import 'package:img_text_gpt/assets/history_model.dart';
 import 'package:img_text_gpt/screens/history_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final generatedText = jsonResponse['choices'][0]['text'];
-        _gptresponse = generatedText;
+        _gptresponse = generatedText.toString().trim();
 
         await Clipboard.setData(ClipboardData(text: _gptresponse));
         if (context.mounted) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:img_text_gpt/history_model.dart';
+import 'package:img_text_gpt/assets/history_model.dart';
 import 'screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
