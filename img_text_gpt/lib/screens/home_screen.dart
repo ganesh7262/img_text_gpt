@@ -24,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String recognisedText = "";
   final _modelBottomSheetTextController = TextEditingController();
   final _promptController = TextEditingController();
+
+  /// this is the default response which will be shown.
   String _gptresponse = '''print("Hello world")''';
+
   final txtRecognizer = TextRecognizer();
   bool _isgettingresponse = false;
 
@@ -173,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HistoryScreen(),
+          builder: (context) => const HistoryScreen(),
         ));
   }
 
@@ -191,8 +194,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child:
-                IconButton(onPressed: showHistory, icon: Icon(Icons.history)),
+            child: IconButton(
+                onPressed: showHistory, icon: const Icon(Icons.history)),
           ),
         ],
       ),

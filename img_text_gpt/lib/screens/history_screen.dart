@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:img_text_gpt/assets/history_model.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../assets/convo_block.dart';
 
 class HistoryScreen extends StatelessWidget {
