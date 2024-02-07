@@ -67,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                       onPressed: () {
+                        _promptController.text = _promptController.text +
+                            _modelBottomSheetTextController.text;
                         Navigator.pop(context);
                       },
                       child: const Text("Send to prompt")),
