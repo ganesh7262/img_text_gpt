@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
     };
 
     final body = jsonEncode({
-      "model": "text-davinci-003",
+      "model": "gpt-3.5-turbo-instruct",
       "prompt": prompt,
       "max_tokens": 250,
       "temperature": 0,
